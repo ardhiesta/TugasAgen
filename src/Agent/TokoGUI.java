@@ -9,6 +9,7 @@ package Agent;
 import javax.swing.table.DefaultTableModel;
 import Agent.Toko;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,6 +30,7 @@ public class TokoGUI extends javax.swing.JFrame {
     public static int sabun;
     public static int pasta_gigi;
     public static int shampo;
+    private DefaultTableModel modelTbBarang;
     
     public TokoGUI() {
         sabun = 0;
@@ -36,6 +38,15 @@ public class TokoGUI extends javax.swing.JFrame {
         shampo = 0;
         
         initComponents();
+//        this.setMinimumSize(new Dimension(480, 600));
+        modelTbBarang = new DefaultTableModel(
+            new Object[][] {
+            },
+            new String[] {
+                "ID Barang","Nama Barang", "Stok"
+            }
+	);
+        tbBarang.setModel(modelTbBarang);
         
         DbOperate dO = new DbOperate();
         try {
@@ -50,6 +61,13 @@ public class TokoGUI extends javax.swing.JFrame {
                 } else {
                     lblJmlPastaGigi.setText(String.valueOf(barang.getStok_barang()));
                 }
+                cbTokoBarang.addItem(barang.getNama_barang());
+                
+                Object[] o = new Object[3];
+                o[0] = barang.getId_barang();
+                o[1] = barang.getNama_barang();
+                o[2] = barang.getStok_barang();
+                modelTbBarang.addRow(o);
             }
         } catch (Exception ex) {
             Logger.getLogger(TokoGUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,11 +96,13 @@ public class TokoGUI extends javax.swing.JFrame {
         lblJmlSabun = new javax.swing.JLabel();
         lblJmlPastaGigi = new javax.swing.JLabel();
         lblJmlShampo = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbBarang = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Toko");
 
-        cbTokoBarang.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sabun", "Pasta Gigi", "Shampo" }));
+        cbTokoBarang.setModel(new javax.swing.DefaultComboBoxModel(new String[] { /*"Sabun", "Pasta Gigi", "Shampo"*/ }));
 
         btnTokoMeminta.setText("Meminta");
         btnTokoMeminta.addActionListener(new java.awt.event.ActionListener() {
@@ -112,6 +132,19 @@ public class TokoGUI extends javax.swing.JFrame {
 
         lblJmlShampo.setText("0");
 
+        tbBarang.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tbBarang);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -119,53 +152,56 @@ public class TokoGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblPesan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDismiss)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtTokoJml)
+                        .addComponent(cbTokoBarang, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTokoMeminta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtTokoJml)
-                                .addComponent(cbTokoBarang, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnTokoMeminta, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnDismiss)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel1))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblJmlSabun)
-                                    .addComponent(lblJmlShampo)
-                                    .addComponent(lblJmlPastaGigi))))
-                        .addGap(0, 339, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblJmlSabun)
+                            .addComponent(lblJmlShampo)
+                            .addComponent(lblJmlPastaGigi)))
+                    .addComponent(lblPesan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(lblJmlSabun))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(lblJmlPastaGigi))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblJmlShampo)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbTokoBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtTokoJml, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTokoMeminta)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblPesan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnDismiss)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(lblJmlSabun))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(lblJmlPastaGigi))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblJmlShampo)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbTokoBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtTokoJml, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTokoMeminta)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblPesan)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDismiss)
+                        .addGap(0, 123, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -228,10 +264,12 @@ public class TokoGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     public static javax.swing.JLabel lblJmlPastaGigi;
     public static javax.swing.JLabel lblJmlSabun;
     public static javax.swing.JLabel lblJmlShampo;
     public static javax.swing.JLabel lblPesan;
+    private javax.swing.JTable tbBarang;
     private javax.swing.JTextField txtTokoJml;
     // End of variables declaration//GEN-END:variables
 }
